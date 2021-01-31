@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "171366836584",
+    "project_id": "shop-app-flutter-b2048",
+    "storage_bucket": "shop-app-flutter-b2048.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171366836584:android:5c95d5e55bd40d0ac74edd",
+        "android_client_info": {
+          "package_name": "com.example.e_commerece_app_ezzat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171366836584-38hqrvl0cnht3v6tcdj9djqg6vjdc7df.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN8rK8QNVK1_Ju0BoC0BkTkG9IiVZFzyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171366836584-38hqrvl0cnht3v6tcdj9djqg6vjdc7df.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

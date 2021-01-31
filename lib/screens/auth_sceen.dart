@@ -1,17 +1,52 @@
 import 'dart:math';
 
+import 'package:e_commerece_app_ezzat/helpers/auth_helper.dart';
+import 'package:e_commerece_app_ezzat/providers/auth_provider.dart';
 import 'package:e_commerece_app_ezzat/widgets/auth_login_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart' as spin;
+import 'package:provider/provider.dart';
 
-class AuthSceen extends StatelessWidget {
+class AuthSceen extends StatefulWidget {
+  @override
+  _AuthSceenState createState() => _AuthSceenState();
+}
+
+class _AuthSceenState extends State<AuthSceen>
+    with SingleTickerProviderStateMixin {
   var width;
+  final globalKey = GlobalKey<ScaffoldState>();
   var height;
+  AnimationController animationController;
+  Animation<double> fade_anim;
+  final auth_helper = AuthHelper();
+  FirebaseAuth auth;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    animationController.dispose();
+  }
+
+  @override
+  void initState() {
+    auth = FirebaseAuth.instance;
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    fade_anim = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(parent: animationController, curve: Curves.linear));
+  }
 
   @override
   Widget build(BuildContext context) {
+    var myAuthProvider = Provider.of<AuthProvider>(context, listen: false);
+    var myAuthProviderLive = Provider.of<AuthProvider>(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.width;
     return Scaffold(
+      key: globalKey,
       body: Container(
         width: width,
         decoration: BoxDecoration(
@@ -43,7 +78,13 @@ class AuthSceen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            AuthLoginWidget(width)
+            if (myAuthProviderLive.showLoad)
+              spin.SpinKitWave(
+                color: Colors.white,
+                size: 50.0,
+              ),
+            AuthLoginWidgetState(width, animationController, auth, fade_anim,
+                auth_helper, globalKey)
           ],
         ),
       ),

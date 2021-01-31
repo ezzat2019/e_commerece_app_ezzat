@@ -3,24 +3,26 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 
 class AuthProvider with ChangeNotifier{
-  bool is_correct_email=false;
-  bool is_correct_password=false;
-  bool is_correct_password_confirm=false;
-  String email="";
-  String pass="";
-  String pass_confirm="";
-  bool login_mode=true;
+  bool is_correct_email = false;
+  bool is_correct_password = false;
+  bool is_correct_password_confirm = false;
+  String email = "";
+  String pass = "";
+  String pass_confirm = "";
+  bool login_mode = true;
+  bool showLoad = false;
 
-
-  void setLoginMode(bool mode)
-  {
-    login_mode=mode;
+  void setShowLoad(bool show) {
+    showLoad = show;
     notifyListeners();
-
   }
 
-  void setIsCorrectConfirmPassword(String pass)
-  {
+  void setLoginMode(bool mode) {
+    login_mode = mode;
+    notifyListeners();
+  }
+
+  void setIsCorrectConfirmPassword(String pass) {
     if (pass.length>5) {
       is_correct_password_confirm=true;
 
@@ -55,6 +57,4 @@ class AuthProvider with ChangeNotifier{
     this.email=email;
     notifyListeners();
   }
-
-
 }

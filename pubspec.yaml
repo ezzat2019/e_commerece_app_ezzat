@@ -21,6 +21,11 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  firebase_core:
+  flutter_spinkit: ^4.1.2+1
+  firebase_auth:
+  firebase_analytics:
+
   provider:
   toast: ^0.1.5
   email_validator: ^1.0.6

@@ -1,40 +1,61 @@
 import 'package:e_commerece_app_ezzat/helpers/auth_helper.dart';
 import 'package:e_commerece_app_ezzat/providers/auth_provider.dart';
+import 'package:e_commerece_app_ezzat/screens/store_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
-class AuthLoginWidget extends StatefulWidget {
+class AuthLoginWidgetState extends StatelessWidget {
   final double width;
-
-  AuthLoginWidget(this.width);
-
-  @override
-  _AuthLoginWidgetState createState() => _AuthLoginWidgetState();
-}
-
-class _AuthLoginWidgetState extends State<AuthLoginWidget>
-    with SingleTickerProviderStateMixin {
+  var height;
   AnimationController animationController;
   Animation<double> fade_anim;
+  final auth_helper;
 
-  @override
-  void initState() {
-    animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
-    fade_anim = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: animationController, curve: Curves.linear));
+  FirebaseAuth auth;
+  final GlobalKey<ScaffoldState> globalKey;
+  var kk;
+
+  AuthLoginWidgetState(
+    this.width,
+    this.animationController,
+    this.auth,
+    this.fade_anim,
+    this.auth_helper,
+    this.globalKey,
+  ) {
+    this.kk = globalKey.currentState;
   }
 
   @override
   Widget build(BuildContext context) {
     var myAuthProvider = Provider.of<AuthProvider>(context, listen: false);
     var myAuthProviderLive = Provider.of<AuthProvider>(context);
+    Future<UserCredential> login(AuthProvider myAuthProvider) async {
+      try {
+        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+            email: myAuthProvider.email, password: myAuthProvider.pass);
+        return userCredential;
+      } on FirebaseAuthException catch (e) {
+        myAuthProvider.setShowLoad(false);
+        if (e.code == 'user-not-found') {
+          print('No user found for that email.');
+          kk.showSnackBar(
+              SnackBar(content: Text('No user found for that email.')));
+        } else if (e.code == 'wrong-password') {
+          print('Wrong password provided for that user.');
+          kk.showSnackBar(SnackBar(
+              content: Text('Wrong password provided for that user.')));
+        }
+        return null;
+      }
+    }
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-      width: widget.width,
+      width: width,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
       child: Card(
           elevation: 12,
@@ -125,7 +146,7 @@ class _AuthLoginWidgetState extends State<AuthLoginWidget>
               AnimatedContainer(
                 constraints: myAuthProviderLive.login_mode
                     ? BoxConstraints(maxHeight: 0, maxWidth: 0)
-                    : BoxConstraints(maxHeight: 60, maxWidth: widget.width),
+                    : BoxConstraints(maxHeight: 60, maxWidth: width),
                 duration: Duration(milliseconds: 500),
                 margin: EdgeInsets.symmetric(horizontal: 20),
                 child: TextField(
@@ -197,8 +218,56 @@ class _AuthLoginWidgetState extends State<AuthLoginWidget>
                       return;
                     }
                   }
+                  myAuthProvider.setShowLoad(true);
+                  if (myAuthProvider.login_mode) {
+                    login(myAuthProvider).then((value) {
+                      if (value != null) {
+                        kk.showSnackBar(SnackBar(content: Text('successed')));
+                        Navigator.of(globalKey.currentContext)
+                            .pushReplacement(MaterialPageRoute(
+                          builder: (context) {
+                            return StoreScreen();
+                          },
+                        ));
+                      }
 
-                  print("${myAuthProvider.email}");
+                      myAuthProvider.setShowLoad(false);
+                    });
+                  } else {
+                    try {
+                      auth
+                          .createUserWithEmailAndPassword(
+                              email: myAuthProvider.email,
+                              password: myAuthProvider.pass)
+                          .then((value) {
+                        myAuthProvider.setShowLoad(false);
+                        Navigator.of(globalKey.currentContext)
+                            .pushReplacement(MaterialPageRoute(
+                          builder: (context) {
+                            return StoreScreen();
+                          },
+                        ));
+                      });
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'weak-password') {
+                        myAuthProvider.setShowLoad(false);
+                        print('The password provided is too weak.');
+                        kk.showSnackBar(SnackBar(
+                            content:
+                                Text('The password provided is too weak.')));
+                      } else if (e.code == 'email-already-in-use') {
+                        myAuthProvider.setShowLoad(false);
+                        print('The account already exists for that email.');
+                        kk.showSnackBar(SnackBar(
+                            content: Text(
+                                'The account already exists for that email.')));
+                      }
+                    } catch (e) {
+                      myAuthProvider.setShowLoad(false);
+                      print(e);
+                      kk.showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  }
                 },
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -239,12 +308,5 @@ class _AuthLoginWidgetState extends State<AuthLoginWidget>
             ],
           )),
     );
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    animationController.dispose();
   }
 }
