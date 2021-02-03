@@ -1,15 +1,26 @@
+import 'package:e_commerece_app_ezzat/providers/cart_provider.dart';
 import 'package:e_commerece_app_ezzat/providers/store_provider.dart';
+import 'package:e_commerece_app_ezzat/screens/cart_screen.dart';
 import 'package:e_commerece_app_ezzat/widgets/store/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 import 'file:///C:/Users/Dell/AndroidStudioProjects/e_commerece_app_ezzat/lib/widgets/store/store_drawer.dart';
 
 class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final myProviderLive = Provider.of<StoreProvider>(context);
-    final myProvider = Provider.of<StoreProvider>(context, listen: false);
+    final myProviderStoreLive = Provider.of<StoreProvider>(context);
+    final myProviderStore = Provider.of<StoreProvider>(context, listen: false);
+
+    final myProviderCartLive = Provider.of<CartProvider>(context);
+    final myProviderCart = Provider.of<CartProvider>(context, listen: false);
+
+    myProviderCart.getAllCarItem().then((value) {
+      myProviderCart.setProductList(value);
+    }).catchError((e) => Toast.show(e.toString(), context));
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.purple.shade100,
@@ -20,7 +31,13 @@ class StoreScreen extends StatelessWidget {
               children: [
                 IconButton(
                   icon: Icon(Icons.shopping_cart),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return CartScreen();
+                      },
+                    ));
+                  },
                 ),
                 Positioned(
                     right: 1,
@@ -30,7 +47,7 @@ class StoreScreen extends StatelessWidget {
                       radius: 10,
                       child: Center(
                         child: Text(
-                          "0",
+                          "${myProviderCartLive.listProduct.length}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -58,11 +75,11 @@ class StoreScreen extends StatelessWidget {
           ],
         ),
         body: GridView.builder(
-            itemCount: myProviderLive.products.length,
+            itemCount: myProviderStoreLive.products.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, childAspectRatio: 4.9 / 4),
             itemBuilder: (context, index) {
-              return ProductItem(myProvider.products[index]);
+              return ProductItem(myProviderStore.products[index]);
             }),
         drawer: StoreDrawer(),
       ),

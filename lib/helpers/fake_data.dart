@@ -1,4 +1,4 @@
-import 'package:e_commerece_app_ezzat/models/product_model.dart';
+import 'package:e_commerece_app_ezzat/local/models/product_model.dart';
 
 abstract class FakeData {
   static List<Product> items = [

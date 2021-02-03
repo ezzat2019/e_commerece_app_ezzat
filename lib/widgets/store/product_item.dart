@@ -1,5 +1,8 @@
-import 'package:e_commerece_app_ezzat/models/product_model.dart';
+import 'package:e_commerece_app_ezzat/local/models/product_model.dart';
+import 'package:e_commerece_app_ezzat/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class ProductItem extends StatelessWidget {
   final Product productItem;
@@ -8,6 +11,7 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final myProviderCart = Provider.of<CartProvider>(context, listen: false);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Card(
@@ -19,13 +23,11 @@ class ProductItem extends StatelessWidget {
         borderRadius: BorderRadius.all(Radius.circular(16)),
         child: Stack(
           children: [
-            InkWell(
-                onTap: () {},
-                child: Image.network(
-                  productItem.imageUrl,
-                  fit: BoxFit.fitWidth,
-                  width: width,
-                )),
+            Image.network(
+              productItem.imageUrl,
+              fit: BoxFit.fitWidth,
+              width: width,
+            ),
             Positioned(
               child: Container(
                 color: Colors.black54,
@@ -49,9 +51,26 @@ class ProductItem extends StatelessWidget {
                     SizedBox(
                       width: 30,
                     ),
-                    Icon(
-                      Icons.shopping_cart,
+                    IconButton(
+                      icon: Icon(Icons.shopping_cart),
                       color: Colors.red,
+                      splashColor: Colors.green,
+                      onPressed: () {
+                        if (myProviderCart.listProduct
+                            .any((element) => element.id == productItem.id)) {
+                          Toast.show(
+                              "This item already exsit at your cart ", context,
+                              duration: Toast.LENGTH_LONG);
+                        } else {
+                          myProviderCart
+                              .addNewProductToCart(productItem)
+                              .then((value) {
+                            print(value);
+                            Toast.show("the product added  to cart", context);
+                          }).catchError(
+                                  (e) => Toast.show(e.toString(), context));
+                        }
+                      },
                     ),
                   ],
                 ),
