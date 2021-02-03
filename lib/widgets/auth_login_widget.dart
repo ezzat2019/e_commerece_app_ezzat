@@ -187,7 +187,7 @@ class AuthLoginWidgetState extends StatelessWidget {
                   height: 30,
                 ),
               RaisedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (AuthHelper.isEmptyFiled(myAuthProvider.email,
                       "please enter your email first", context)) {
                     return;
@@ -235,7 +235,7 @@ class AuthLoginWidgetState extends StatelessWidget {
                     });
                   } else {
                     try {
-                      auth
+                      await auth
                           .createUserWithEmailAndPassword(
                               email: myAuthProvider.email,
                               password: myAuthProvider.pass)

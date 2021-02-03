@@ -15,15 +15,6 @@ class AuthHelper {
     }
   }
 
-  bool isLogin() {
-    auth.authStateChanges().listen((User user) {
-      if (user == null) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-  }
 
   factory AuthHelper() {
     return instace;
