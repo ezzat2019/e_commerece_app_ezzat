@@ -1,6 +1,6 @@
 import 'package:e_commerece_app_ezzat/main.dart';
+import 'package:e_commerece_app_ezzat/screens/cart_screen.dart';
 import 'package:e_commerece_app_ezzat/screens/manage_store_screen.dart';
-import 'package:e_commerece_app_ezzat/screens/order_screen.dart';
 import 'package:e_commerece_app_ezzat/screens/store_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class StoreDrawer extends StatelessWidget {
               leading: Icon(Icons.payment),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => OrderScreen(),
+                  builder: (context) => CartScreen(),
                 ));
               }),
           Divider(),

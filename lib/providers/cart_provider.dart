@@ -21,7 +21,7 @@ class CartProvider with ChangeNotifier {
 
   Future<void> initlDataBase() async {
     mainDataBase =
-        await $FloorMainDataBase.databaseBuilder('app_database.db').build();
+        await $FloorMainDataBase.databaseBuilder('app_database3.db').build();
     storeDao = mainDataBase.storeDao;
   }
 

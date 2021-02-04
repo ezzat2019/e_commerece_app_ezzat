@@ -27,35 +27,38 @@ class StoreScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text("Store"),
           actions: [
-            Stack(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.shopping_cart),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return CartScreen();
-                      },
-                    ));
-                  },
-                ),
-                Positioned(
-                    right: 1,
-                    top: 2,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.red,
-                      radius: 10,
-                      child: Center(
-                        child: Text(
-                          "${myProviderCartLive.listProduct.length}",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.shopping_cart),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) {
+                          return CartScreen();
+                        },
+                      ));
+                    },
+                  ),
+                  Positioned(
+                      right: 1,
+                      top: 2,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 10,
+                        child: Center(
+                          child: Text(
+                            "${myProviderCartLive.listProduct.length}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ))
-              ],
+                      ))
+                ],
+              ),
             ),
             PopupMenuButton(
               itemBuilder: (context) => [
@@ -69,7 +72,11 @@ class StoreScreen extends StatelessWidget {
                 ),
               ],
               onSelected: (value) {
-                print(value);
+                if (value == "all") {
+                  myProviderStore.getAll();
+                } else if (value == "fav") {
+                  myProviderStore.getAllFav();
+                }
               },
             )
           ],

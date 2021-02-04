@@ -65,7 +65,7 @@ class _$MainDataBase extends MainDataBase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
       },
@@ -80,7 +80,7 @@ class _$MainDataBase extends MainDataBase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `cart_product` (`id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `price` REAL, `imageUrl` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `cart_product` (`id` TEXT NOT NULL, `title` TEXT, `description` TEXT, `price` REAL, `imageUrl` TEXT, `is_fav` INTEGER, `user_id` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -100,23 +100,29 @@ class _$StoreDao extends StoreDao {
         _productInsertionAdapter = InsertionAdapter(
             database,
             'cart_product',
-            (Product item) => <String, dynamic>{
+            (Product item) =>
+            <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
                   'price': item.price,
-                  'imageUrl': item.imageUrl
+                  'imageUrl': item.imageUrl,
+                  'is_fav': item.is_fav == null ? null : (item.is_fav ? 1 : 0),
+                  'user_id': item.user_id
                 }),
         _productDeletionAdapter = DeletionAdapter(
             database,
             'cart_product',
             ['id'],
-            (Product item) => <String, dynamic>{
+            (Product item) =>
+            <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
                   'price': item.price,
-                  'imageUrl': item.imageUrl
+                  'imageUrl': item.imageUrl,
+                  'is_fav': item.is_fav == null ? null : (item.is_fav ? 1 : 0),
+                  'user_id': item.user_id
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -137,7 +143,9 @@ class _$StoreDao extends StoreDao {
             title: row['title'] as String,
             description: row['description'] as String,
             price: row['price'] as double,
-            imageUrl: row['imageUrl'] as String));
+            imageUrl: row['imageUrl'] as String,
+            is_fav: row['is_fav'] == null ? null : (row['is_fav'] as int) != 0,
+            user_id: row['user_id'] as String));
   }
 
   @override
@@ -150,7 +158,9 @@ class _$StoreDao extends StoreDao {
             title: row['title'] as String,
             description: row['description'] as String,
             price: row['price'] as double,
-            imageUrl: row['imageUrl'] as String));
+            imageUrl: row['imageUrl'] as String,
+            is_fav: row['is_fav'] == null ? null : (row['is_fav'] as int) != 0,
+            user_id: row['user_id'] as String));
   }
 
   @override

@@ -13,6 +13,17 @@ class Product {
   final double price;
   @ColumnInfo(name: "imageUrl")
   final String imageUrl;
+  @ColumnInfo(name: "is_fav")
+  final bool is_fav;
+  @ColumnInfo(name: "user_id")
+  final String user_id;
 
-  Product({this.id, this.title, this.description, this.price, this.imageUrl});
+  Product(
+      {this.id,
+      this.title,
+      this.description,
+      this.price,
+      this.imageUrl,
+      this.is_fav,
+      this.user_id});
 }
