@@ -14,4 +14,7 @@ abstract class StoreDao {
 
   @delete
   Future<int> reoveCartItemById(Product product);
+
+  @Query('DELETE FROM cart_product')
+  Future<void> deleteAllCart();
 }

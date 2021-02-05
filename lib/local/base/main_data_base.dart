@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 part 'main_data_base.g.dart';
 
-@Database(version: 2, entities: [Product])
+@Database(version: 4, entities: [Product])
 abstract class MainDataBase extends FloorDatabase {
   StoreDao get storeDao;
 }

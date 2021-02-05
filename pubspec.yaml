@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  json_annotation:
+  cloud_firestore:
   floor: ^0.18.0
   google_fonts: ^1.1.2
   firebase_core:
@@ -40,6 +42,7 @@ dependencies:
   cupertino_icons: ^1.0.0
 
 dev_dependencies:
+  json_serializable:
   floor_generator: ^0.18.0
   build_runner: ^1.10.3
   flutter_test:

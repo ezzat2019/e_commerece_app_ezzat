@@ -23,9 +23,7 @@ class StoreDrawer extends StatelessWidget {
             title: Text("Store"),
             leading: Icon(Icons.shop),
             onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => StoreScreen(),
-              ));
+              Navigator.of(context).pop();
             },
           ),
           Divider(),

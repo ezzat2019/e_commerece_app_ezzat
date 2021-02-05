@@ -65,7 +65,7 @@ class _$MainDataBase extends MainDataBase {
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 2,
+      version: 4,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
       },
@@ -100,8 +100,7 @@ class _$StoreDao extends StoreDao {
         _productInsertionAdapter = InsertionAdapter(
             database,
             'cart_product',
-            (Product item) =>
-            <String, dynamic>{
+            (Product item) => <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
@@ -114,8 +113,7 @@ class _$StoreDao extends StoreDao {
             database,
             'cart_product',
             ['id'],
-            (Product item) =>
-            <String, dynamic>{
+            (Product item) => <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
@@ -161,6 +159,11 @@ class _$StoreDao extends StoreDao {
             imageUrl: row['imageUrl'] as String,
             is_fav: row['is_fav'] == null ? null : (row['is_fav'] as int) != 0,
             user_id: row['user_id'] as String));
+  }
+
+  @override
+  Future<void> deleteAllCart() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM cart_product');
   }
 
   @override

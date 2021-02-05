@@ -21,7 +21,7 @@ class CartProvider with ChangeNotifier {
 
   Future<void> initlDataBase() async {
     mainDataBase =
-        await $FloorMainDataBase.databaseBuilder('app_database3.db').build();
+        await $FloorMainDataBase.databaseBuilder('app_database4.db').build();
     storeDao = mainDataBase.storeDao;
   }
 
@@ -43,5 +43,10 @@ class CartProvider with ChangeNotifier {
   Future<int> reoveCartItemById(Product product) async {
     await initlDataBase();
     return storeDao.reoveCartItemById(product);
+  }
+
+  Future<void> removeAll() async {
+    await initlDataBase();
+    return storeDao.deleteAllCart();
   }
 }

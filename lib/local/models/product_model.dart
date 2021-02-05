@@ -1,6 +1,10 @@
 import 'package:floor/floor.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'product_model.g.dart';
 
 @Entity(tableName: "cart_product")
+@JsonSerializable()
 class Product {
   @PrimaryKey()
   @ColumnInfo(nullable: false, name: "id")
