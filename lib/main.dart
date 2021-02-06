@@ -1,5 +1,6 @@
 import 'package:e_commerece_app_ezzat/providers/auth_provider.dart';
 import 'package:e_commerece_app_ezzat/providers/cart_provider.dart';
+import 'package:e_commerece_app_ezzat/providers/manage_store_provider.dart';
 import 'package:e_commerece_app_ezzat/providers/store_provider.dart';
 import 'package:e_commerece_app_ezzat/screens/auth_screen.dart';
 import 'package:e_commerece_app_ezzat/screens/store_screen.dart';
@@ -17,6 +18,7 @@ void main() async {
     ChangeNotifierProvider.value(value: AuthProvider()),
     ChangeNotifierProvider.value(value: StoreProvider()),
     ChangeNotifierProvider.value(value: CartProvider()),
+    ChangeNotifierProvider.value(value: ManageStoreProvider()),
   ], child: MyApp()));
 }
 

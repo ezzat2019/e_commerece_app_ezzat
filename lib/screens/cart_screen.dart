@@ -1,16 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerece_app_ezzat/helpers/order_now_helper.dart';
-import 'package:e_commerece_app_ezzat/local/models/order_model.dart';
 import 'package:e_commerece_app_ezzat/local/models/product_model.dart';
 import 'package:e_commerece_app_ezzat/providers/cart_provider.dart';
 import 'package:e_commerece_app_ezzat/widgets/cart/cart_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -38,6 +37,7 @@ class _CartScreenState extends State<CartScreen> {
       myList.forEach((element) {
         total_price += element.price;
         myProviderCart.setTotalPrice(total_price);
+        setState(() {});
       });
       copmute = false;
     }
@@ -52,38 +52,38 @@ class _CartScreenState extends State<CartScreen> {
                 margin: EdgeInsets.all(16),
                 child: Container(
                   height: 80,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        "Total",
-                        style: GoogleFonts.lato(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: weidth * .17),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            color: Theme.of(context).primaryColor,
-                            padding:
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text(
+                    "Total",
+                    style: GoogleFonts.lato(
+                        fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: weidth * .14),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        color: Theme.of(context).primaryColor,
+                        padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                            child: Text(
-                              myList.length == 0
-                                  ? "\$00.00"
-                                  : "\$${myProviderCartLive.total_price.toStringAsFixed(2)}",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 15,
-                                  backgroundColor: Theme.of(context).primaryColor),
-                            ),
-                          ),
+                        child: Text(
+                          myList.length == 0
+                              ? "\$00.00"
+                              : "\$${myProviderCartLive.total_price.toStringAsFixed(2)}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              backgroundColor: Theme.of(context).primaryColor),
                         ),
                       ),
-                      FlatButton(
+                    ),
+                  ),
+                  FlatButton(
                       onPressed: () {
                         showDialog(
                           context: context,
@@ -96,8 +96,11 @@ class _CartScreenState extends State<CartScreen> {
                         );
 
                         orderNowHelper
-                            .addOrders(FirebaseAuth.instance.currentUser.uid,
-                                myList, total_price, Timestamp.now())
+                            .addOrders(
+                                FirebaseAuth.instance.currentUser.uid,
+                                myList,
+                                myProviderCart.total_price,
+                                Timestamp.now())
                             .then((value) {
                           myProviderCart.removeAll().catchError((e) {
                             Navigator.of(context).pop();
@@ -125,20 +128,20 @@ class _CartScreenState extends State<CartScreen> {
                             color: Theme.of(context).primaryColor),
                       ))
                 ],
-                  ),
-                ),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                      direction: DismissDirection.endToStart,
-                      key: ValueKey(myList[index].id),
-                      confirmDismiss: (direction) {
-                        if (direction == DismissDirection.endToStart) {
+            ),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return Dismissible(
+                  direction: DismissDirection.endToStart,
+                  key: ValueKey(myList[index].id),
+                  confirmDismiss: (direction) {
+                    if (direction == DismissDirection.endToStart) {
                           showDialog(
                             context: context,
                             builder: (context) {

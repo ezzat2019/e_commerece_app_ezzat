@@ -11,7 +11,7 @@ class CartProvider with ChangeNotifier {
 
   void setTotalPrice(double total_price) {
     this.total_price = total_price;
-    notifyListeners();
+    if (total_price > 0) {}
   }
 
   void setProductList(List<Product> listProduct) {

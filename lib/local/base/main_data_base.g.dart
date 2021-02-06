@@ -100,7 +100,7 @@ class _$StoreDao extends StoreDao {
         _productInsertionAdapter = InsertionAdapter(
             database,
             'cart_product',
-            (Product item) => <String, dynamic>{
+                (Product item) => <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
@@ -113,7 +113,7 @@ class _$StoreDao extends StoreDao {
             database,
             'cart_product',
             ['id'],
-            (Product item) => <String, dynamic>{
+                (Product item) => <String, dynamic>{
                   'id': item.id,
                   'title': item.title,
                   'description': item.description,
