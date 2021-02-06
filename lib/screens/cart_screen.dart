@@ -18,7 +18,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   List<Product> myList;
-
+  final GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
   bool copmute = true;
   OrderNowHelper orderNowHelper = OrderNowHelper();
 
@@ -41,17 +41,19 @@ class _CartScreenState extends State<CartScreen> {
       });
       copmute = false;
     }
+    BuildContext vv;
 
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.purple.shade100,
-          appBar: AppBar(title: Text("Your Cart")),
-          body: Column(
-            children: [
-              Card(
-                margin: EdgeInsets.all(16),
-                child: Container(
-                  height: 80,
+      key: globalKey,
+      backgroundColor: Colors.purple.shade100,
+      appBar: AppBar(title: Text("Your Cart")),
+      body: Column(
+        children: [
+          Card(
+            margin: EdgeInsets.all(16),
+            child: Container(
+              height: 80,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -86,10 +88,12 @@ class _CartScreenState extends State<CartScreen> {
                   FlatButton(
                       onPressed: () {
                         showDialog(
-                          context: context,
-                          builder: (context) {
+                          context: globalKey.currentState.context,
+                          builder: (context2) {
+                            vv = context2;
                             return SpinKitRotatingCircle(
-                              color: Theme.of(context).accentColor,
+                              color: Theme.of(globalKey.currentState.context)
+                                  .accentColor,
                               size: 50.0,
                             );
                           },
@@ -103,16 +107,22 @@ class _CartScreenState extends State<CartScreen> {
                                 Timestamp.now())
                             .then((value) {
                           myProviderCart.removeAll().catchError((e) {
-                            Navigator.of(context).pop();
-                            Toast.show(e.toString(), context,
-                                duration: Toast.LENGTH_LONG);
+                            if (vv != null) {
+                              Navigator.of(vv).pop();
+                              Toast.show(e.toString(), context,
+                                  duration: Toast.LENGTH_LONG);
+                            }
+
                             // setState(() {
                             //
                             // });
                           }).then((value) {
-                            Navigator.of(context).pop();
-                            Toast.show("successed", context,
-                                duration: Toast.LENGTH_LONG);
+                            if (vv != null) {
+                              Navigator.of(vv).pop();
+                              Toast.show("successed", context,
+                                  duration: Toast.LENGTH_LONG);
+                            }
+
                             // setState(() {
                             //
                             // });
@@ -142,17 +152,17 @@ class _CartScreenState extends State<CartScreen> {
                   key: ValueKey(myList[index].id),
                   confirmDismiss: (direction) {
                     if (direction == DismissDirection.endToStart) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text("Are you sure ?"),
-                                content:
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text("Are you sure ?"),
+                            content:
                                 Text("Do you want delete Item from the cart?"),
-                                actions: [
-                                  FlatButton(
-                                      onPressed: () {
-                                        myProviderCart
+                            actions: [
+                              FlatButton(
+                                  onPressed: () {
+                                    myProviderCart
                                             .reoveCartItemById(myList[index])
                                             .then((value) {
                                           total_price = 0.0;

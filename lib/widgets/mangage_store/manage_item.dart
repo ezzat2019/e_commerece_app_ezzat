@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:toast/toast.dart';
 
 class ManageItem extends StatelessWidget {
   final OrderModel orderModel;
@@ -16,6 +15,7 @@ class ManageItem extends StatelessWidget {
 
   OrderNowHelper helper = OrderNowHelper();
   String id;
+  BuildContext vv;
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +59,7 @@ class ManageItem extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (context) {
+                    vv = context;
                     return SpinKitRotatingCircle(
                       color: Theme.of(context).primaryColor,
                       size: 50.0,
@@ -67,11 +68,18 @@ class ManageItem extends StatelessWidget {
                 );
                 helper.deleteOrder(id).then((value) {
                   myManageStoreProvider.removeItem(index);
-                  Navigator.of(context).pop();
-                  Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text("The Order is canceled")));
-                }).catchError((e) => Toast.show(e.toString(), context,
-                    duration: Toast.LENGTH_LONG));
+                  if (vv != null) {
+                    Navigator.of(vv).pop();
+                    Scaffold.of(context).showSnackBar(
+                        SnackBar(content: Text("The Order is canceled")));
+                  }
+                }).catchError((e) {
+                  if (vv != null) {
+                    Navigator.of(vv).pop();
+                    Scaffold.of(context)
+                        .showSnackBar(SnackBar(content: Text(e.toString())));
+                  }
+                });
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
