@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  change_app_package_name:
   json_annotation:
   cloud_firestore:
   floor: ^0.18.0
