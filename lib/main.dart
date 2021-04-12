@@ -24,6 +24,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   String s = "ezzat";
+  String ahmed="hello";
 
   Future<Widget> getHome() async {
     Widget main_home;
