@@ -23,6 +23,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  String s = "ezzat";
+
   Future<Widget> getHome() async {
     Widget main_home;
     await FirebaseAuth.instance.authStateChanges().listen((User user) {
