@@ -47,7 +47,7 @@ class StoreDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text("Logout"),
-            leading: Icon(Icons.logout),
+            leading: Icon(Icons.verified_user),
             onTap: () {
               FirebaseAuth.instance.signOut().then((value) {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

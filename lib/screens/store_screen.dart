@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
-import 'file:///C:/Users/Dell/AndroidStudioProjects/e_commerece_app_ezzat/lib/widgets/store/store_drawer.dart';
+import '../widgets/store/store_drawer.dart';
 
 class StoreScreen extends StatelessWidget {
   @override

@@ -1,6 +1,6 @@
 name: e_commerece_app_ezzat
 description: A new Flutter application.
-
+# version 1.20.4
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.2+2
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -24,7 +24,7 @@ dependencies:
   change_app_package_name:
   json_annotation:
   cloud_firestore:
-  floor: ^0.18.0
+  floor:
   google_fonts: ^1.1.2
   firebase_core:
   flutter_spinkit: ^4.1.2+1
@@ -45,8 +45,8 @@ dependencies:
 dev_dependencies:
   flutter_launcher_icons: "^0.8.0"
   json_serializable:
-  floor_generator: ^0.18.0
-  build_runner: ^1.10.3
+  floor_generator:
+  build_runner:
   flutter_test:
     sdk: flutter
 

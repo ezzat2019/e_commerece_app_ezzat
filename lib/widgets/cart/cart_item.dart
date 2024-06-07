@@ -27,7 +27,6 @@ class CartItem extends StatelessWidget {
         radius: 30,
       ),
       trailing: Text("${pos + 1} x"),
-      tileColor: Colors.white,
       subtitle: Text(
         product.description,
         maxLines: 2,
